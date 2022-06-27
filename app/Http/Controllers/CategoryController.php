@@ -10,12 +10,14 @@ class CategoryController extends Controller
     //
     public function store(Request $request){
 
-        dd($request->name);
+
         $data = $request->validate([
-            'name'=> 'alpha'
+            'name'=> 'required'
         ]);
+
         Category::create($data);
-        return 'SUCCESS';
+        return response()->json($data, 200);
+
     }
     public function getAllCat(){
         return Category::latest()->get();
