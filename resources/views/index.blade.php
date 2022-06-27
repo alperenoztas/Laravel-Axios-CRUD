@@ -22,16 +22,8 @@
                         <th>Name</th>
                         <th>Actions</th>
                     </tr>
-                    <tbody>
-                        <tr>
-                            <td>Sl</td>
-                            <td>Name</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">Edit</button>
-                                <button class="btn btn-sm btn-secondary">View</button>
-                                <button class="btn btn-sm btn-danger">Delete</button>
-                            </td>
-                        </tr>
+                    <tbody id="tbody">
+
                     </tbody>
                 </table>
             </div>
@@ -61,10 +53,25 @@
 
     <script>
 
+
+        function fetchDataTable(data){
+
+            var table = '';
+            $.each(data, function (key, value) {
+                console.log(value);
+
+                table = table +'<tr>'+'<td>'+value.id+
+                            '</td>'+'<td>'+ value.name+
+                            '<td><button class="btn btn-sm btn-primary">Edit</button><button class="btn btn-sm btn-secondary">View</button><button class="btn btn-sm btn-danger">Delete</button> </td>'+'</tr>';
+
+            });
+            $('#tbody').html(table);
+        }
+
         function getAllData(){
             axios.get("{{ route('category.get') }}")
             .then(function(response){
-                console.log(response);
+                fetchDataTable(response.data);
             })
         }
         getAllData();
@@ -74,7 +81,7 @@
             $('.send').click(function(e) {
                 e.preventDefault();
                 var data = $('#name').val()
-                alert(data + typeof(data));
+
                 axios({
                     method: 'post',
                     url: '{{ route('category.store') }}',
@@ -83,6 +90,7 @@
                     }
                 })
                 .then(function(response) {
+                        getAllData();
                         Swal.fire(
                             'Adding Employee',
                             'Added',
